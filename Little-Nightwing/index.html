@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Little Nightwing</title>
+<style>
+:root{color-scheme:dark;--bg:#111218;--panel:#1b1d26;--line:#343744;--muted:#a5a7b5;--peach:#e99a82;--accent:#c77f91}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0,#292634,#111218 65%);color:#f1eff3;font:15px system-ui,sans-serif;min-height:100vh}
+header{padding:18px 20px;display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:auto}h1{font-size:21px;margin:0;letter-spacing:.4px}.sub{color:var(--muted);font-size:12px}
+main{max-width:1100px;margin:auto;padding:0 16px 30px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.8fr);gap:14px}
+.panel{background:#1a1c25eF;border:1px solid var(--line);border-radius:17px;overflow:hidden}
+.scene{min-height:480px;position:relative;background:linear-gradient(#24232e 0 68%,#35313a 68%);overflow:hidden}
+.room-label{position:absolute;top:15px;left:17px;color:#d0cbd5;font-size:12px;letter-spacing:1px;text-transform:uppercase}
+.window{position:absolute;right:8%;top:11%;width:24%;height:26%;border:8px solid #383744;border-radius:8px;background:linear-gradient(#151a2a,#35303d 65%,#d08c80);box-shadow:0 0 45px #d08c8030}
+.window:before{content:"";position:absolute;left:48%;height:100%;width:5px;background:#45424d}.window:after{content:"";position:absolute;top:48%;height:5px;width:100%;background:#45424d}
+.door{position:absolute;left:5%;bottom:0;width:18%;height:47%;background:#292832;border:5px solid #46424c;border-bottom:0;border-radius:7px 7px 0 0}.door:after{content:"";position:absolute;right:12px;top:50%;width:7px;height:7px;border-radius:50%;background:#d7a37f}
+.floorline{position:absolute;bottom:31%;width:100%;height:3px;background:#62545a}
+.rug{position:absolute;bottom:7%;left:32%;width:40%;height:15%;border-radius:50%;background:#25232e;border:2px solid #514550}
+.pet{position:absolute;left:50%;bottom:21%;width:210px;height:260px;transform:translateX(-50%);transition:left 1.2s ease,bottom .8s ease}
+.pet svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 12px 12px #0008)}
+.pet.sleep{bottom:37%;transform:translateX(-50%) rotate(180deg) scale(.78)}
+.pet.fly{bottom:45%;transform:translateX(-50%) scale(.95)}
+.pet.sit{bottom:18%;transform:translateX(-50%) scale(.88)}
+.pet .wing{transform-origin:50% 35%;animation:wing 2.6s ease-in-out infinite}
+.pet.fly .wing{animation:flap .25s ease-in-out infinite alternate}
+@keyframes wing{50%{transform:rotate(-3deg)}}@keyframes flap{to{transform:rotate(13deg) scaleY(.9)}}
+.statusline{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:12px 15px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.right{display:flex;flex-direction:column;gap:14px}.box{padding:15px}.box h2{font-size:14px;margin:0 0 12px}.meters{display:grid;grid-template-columns:1fr 1fr;gap:12px}.meter label{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-bottom:5px}.bar{height:7px;border-radius:9px;background:#343642;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#9d778e,#e99a82);border-radius:9px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}button{border:1px solid #484653;background:#292a35;color:#f4eff4;border-radius:10px;padding:10px 9px;font:inherit;font-size:12px;cursor:pointer}button:active{transform:scale(.98)}button.primary{background:#80596d;border-color:#a77b8c}button:disabled{opacity:.45;cursor:not-allowed}
+.log{height:125px;overflow:auto;color:#c5c1cb;font-size:12px;line-height:1.6}.log p{margin:0 0 5px}.request{display:flex;gap:7px}.request button{white-space:nowrap}
+input,select{width:100%;padding:10px;border-radius:9px;border:1px solid #494754;background:#12131a;color:#eee;font:inherit;margin:5px 0 10px}input[type=checkbox]{width:auto;margin:0 7px 0 0}label.setting{font-size:12px;color:#d2cfda;display:flex;align-items:center;gap:5px;margin:8px 0}
+small,.hint{font-size:11px;color:var(--muted);line-height:1.5}.hidden{display:none!important}.tabs{display:flex;gap:6px}.tabs button{flex:1}.tabs button.active{background:#5e465c;border-color:#a77b8c}
+.foods{display:flex;gap:7px;flex-wrap:wrap}.foods button{flex:1;min-width:75px}
+@media(max-width:760px){main{grid-template-columns:1fr}.scene{min-height:410px}.pet{transform:translateX(-50%) scale(.88);transform-origin:bottom center}.pet.sleep{transform:translateX(-50%) rotate(180deg) scale(.7)}}
+</style>
+</head>
+<body>
+<header><div><h1>Little Nightwing</h1><div class="sub">A tiny bat with a very big personality</div></div><div class="sub" id="connection">LOCAL BRAIN</div></header>
+<main>
+<section class="panel">
+<div class="scene" id="scene">
+<div class="room-label" id="roomLabel">Living room · evening</div><div class="window"></div><div class="door"></div><div class="floorline"></div><div class="rug"></div>
+<div class="pet sit" id="pet">
+<svg viewBox="0 0 220 270" role="img" aria-label="Small cartoon bat character">
+<g class="wing" fill="#e99a82" stroke="#393640" stroke-width="5" stroke-linejoin="round">
+<path d="M92 102 C66 63 34 28 12 45 C28 52 24 66 5 68 C30 85 18 105 4 117 C31 122 37 149 25 173 C48 165 62 181 68 205 C82 187 94 171 104 154Z"/>
+<path d="M128 102 C154 63 186 28 208 45 C192 52 196 66 215 68 C190 85 202 105 216 117 C189 122 183 149 195 173 C172 165 158 181 152 205 C138 187 126 171 116 154Z"/>
+<path d="M92 102L12 45M92 102L5 117M92 102L25 173M128 102L208 45M128 102L215 117M128 102L195 173" fill="none" stroke="#55515d" stroke-width="6"/>
+</g>
+<path d="M84 72L70 13Q68 4 61 13L48 67Q61 91 84 89Z" fill="#30303a" stroke="#17171e" stroke-width="3"/><path d="M136 72L150 13Q152 4 159 13L172 67Q159 91 136 89Z" fill="#30303a" stroke="#17171e" stroke-width="3"/>
+<path d="M77 67L67 25Q64 20 61 29L58 66Q67 79 77 78Z" fill="#e99a82"/><path d="M143 67L153 25Q156 20 159 29L162 66Q153 79 143 78Z" fill="#e99a82"/>
+<path d="M71 86Q110 57 149 86L157 137Q151 169 110 174Q69 169 63 137Z" fill="#b9b7c1" stroke="#282630" stroke-width="4"/>
+<path d="M70 103Q76 73 103 75Q116 61 130 78Q149 76 153 104Q135 89 121 98Q105 85 89 101Q80 94 70 103Z" fill="#24232c"/>
+<path d="M74 104Q86 91 102 102L99 117Q85 121 75 112Z" fill="#d94854"/><path d="M118 102Q135 91 147 104L145 112Q133 121 120 117Z" fill="#d94854"/>
+<ellipse cx="89" cy="108" rx="5" ry="6" fill="#17151d"/><ellipse cx="133" cy="108" rx="5" ry="6" fill="#17151d"/>
+<path d="M103 126L110 122L117 126L110 131Z" fill="#49343a"/><path d="M99 143Q110 147 121 143" fill="none" stroke="#51454d" stroke-width="2"/>
+<path d="M80 169Q110 159 140 169L153 229L67 229Z" fill="#24242c" stroke="#14141a" stroke-width="3"/>
+<path d="M81 174L139 174L145 221L75 221Z" fill="#33323b"/><path d="M87 180L110 192L133 180M110 191L110 221" fill="none" stroke="#55515d" stroke-width="2"/>
+<path d="M67 181Q37 180 31 199L25 205L30 211L39 207L45 218L52 210L58 218L67 205Z" fill="#b9b7c1" stroke="#282630" stroke-width="3"/>
+<path d="M153 181Q183 180 189 199L195 205L190 211L181 207L175 218L168 210L162 218L153 205Z" fill="#b9b7c1" stroke="#282630" stroke-width="3"/>
+<path d="M76 225L105 225L101 259L72 259Z M115 225L144 225L148 259L119 259Z" fill="#22232b" stroke="#111118" stroke-width="3"/>
+<path d="M69 258L104 258L108 267L65 267Z M116 258L151 258L155 267L112 267Z" fill="#38313f" stroke="#17151d" stroke-width="3"/>
+</svg></div>
+</div>
+<div class="statusline"><span id="activity">Sitting quietly</span><span id="mood">Mood: neutral</span><span id="clock">Day 1 · 18:00</span></div>
+</section>
+<aside class="right">
+<section class="panel box"><h2>How is he doing?</h2><div class="meters">
+<div class="meter"><label><span>Hunger</span><b id="hungerN">35%</b></label><div class="bar"><i id="hungerB" style="width:35%"></i></div></div>
+<div class="meter"><label><span>Energy</span><b id="energyN">75%</b></label><div class="bar"><i id="energyB" style="width:75%"></i></div></div>
+<div class="meter"><label><span>Happiness</span><b id="happyN">65%</b></label><div class="bar"><i id="happyB" style="width:65%"></i></div></div>
+<div class="meter"><label><span>Trust</span><b id="trustN">20%</b></label><div class="bar"><i id="trustB" style="width:20%"></i></div></div>
+</div><p class="hint" id="thought">He is watching you from across the room.</p></section>
+<section class="panel box"><h2>Send him something</h2><div class="foods">
+<button data-food="fruit">🍓 Fruit</button><button data-food="snack">🍪 Snack</button><button data-food="drink">🥤 Drink</button><button data-food="meal">🥪 Meal</button>
+</div><p class="hint">A delivery appears outside his front door. He decides whether to eat it now or save it.</p><div id="delivery" class="hint">No delivery waiting.</div></section>
+<section class="panel box"><h2>Spend time together</h2><div class="actions"><button id="wave">👋 Wave</button><button id="talk">💬 Talk to him</button><button id="outside">🌙 Go outside</button><button id="bed">🛏️ Bedroom</button></div></section>
+<section class="panel box"><h2>His thoughts</h2><div class="log" id="log"><p>18:00 — He notices you.</p></div></section>
+<section class="panel box"><div class="tabs"><button class="active" data-tab="settings">Settings</button><button data-tab="inventory">Storage</button></div>
+<div id="settings"><h2 style="margin-top:13px">AI settings</h2><label class="hint">Gemini API key (kept on this device)</label><input id="apiKey" type="password" placeholder="Paste your API key"><label class="hint">Gemini model</label><input id="model" value="gemini-3.6" placeholder="Model ID"><label class="setting"><input id="aiEnabled" type="checkbox"> Let Gemini control his decisions</label><label class="setting"><input id="autoWalk" type="checkbox" checked> Allow AI to decide when to walk</label><label class="setting"><input id="autoFly" type="checkbox" checked> Allow occasional learning flights</label><label class="setting"><input id="autoSleep" type="checkbox" checked> Allow him to choose when to sleep</label><button class="primary" id="save">Save settings</button><p class="hint">The AI key is stored in this browser only. A browser-based key can still be seen by someone with access to this device. Gemini model availability depends on your API access. Without AI enabled, a small local behaviour system keeps him active.</p></div>
+<div id="inventory" class="hidden"><h2 style="margin-top:13px">His little stash</h2><p id="stash" class="hint">Nothing stored yet.</p></div>
+</section>
+</aside>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const s={room:"Living room",activity:"Sitting quietly",hunger:35,energy:75,happy:65,trust:20,delivery:null,stash:[],mood:"neutral",day:1,hour:18,minute:0,last:"",busy:false};
+const clamp=n=>Math.max(0,Math.min(100,n));
+function log(t){const p=document.createElement("p");p.textContent=s.hour.toString().padStart(2,"0")+":"+s.minute.toString().padStart(2,"0")+" — "+t;$("log").prepend(p)}
+function render(){["hunger","energy","happy","trust"].forEach(k=>{$(k+"N").textContent=Math.round(s[k])+"%";$(k+"B").style.width=s[k]+"%"});$("activity").textContent=s.activity;$("mood").textContent="Mood: "+s.mood;$("clock").textContent="Day "+s.day+" · "+String(s.hour).padStart(2,"0")+":"+String(s.minute).padStart(2,"0");$("roomLabel").textContent=s.room+" · "+(s.hour>=20||s.hour<6?"night":"day");$("delivery").textContent=s.delivery?"📦 "+s.delivery+" waiting outside the front door.":"No delivery waiting.";$("stash").textContent=s.stash.length?s.stash.join(", "):"Nothing stored yet.";$("thought").textContent=s.last||"He is watching you from across the room.";const pet=$("pet");pet.className="pet "+(s.activity.includes("sleep")?"sleep":s.activity.includes("flying")?"fly":s.activity.includes("sitting")?"sit":"");pet.style.left=s.room==="Outside"?"50%":s.room==="Bedroom"?"68%":s.activity.includes("walking")?"38%":"53%"}
+function setActivity(a,thought){s.activity=a;s.last=thought||a;render()}
+function eatOrStore(){if(!s.delivery)return;const food=s.delivery;s.delivery=null;if(Math.random()<.63){s.hunger=clamp(s.hunger-({fruit:15,snack:10,drink:4,meal:30}[food]||15));s.happy=clamp(s.happy+5);setActivity("Eating "+food,"He decided to eat the "+food+".");log("He takes the "+food+" to his favourite eating spot.")}else{s.stash.push(food);setActivity("Putting food away","He carefully stores the "+food+" for later.");log("He stores the "+food+" in his little stash.")}}
+async function aiDecision(){const key=$("apiKey").value.trim(),model=$("model").value.trim()||"gemini-3.6";if(!$("aiEnabled").checked||!key)return localDecision();if(s.busy)return;s.busy=true;$("connection").textContent="ASKING GEMINI…";const prompt="You control a small fictional bat pet in a safe cozy house. Choose ONE next action. Allowed actions: sit, walk, sleep, explore, fly, eat, store, play, ask_food, ask_drink, ask_snack, ask_mouse. Never request real animals; ask_mouse means request a fictional cartoon mouse snack only. Do not harm or describe injury. Context: "+JSON.stringify({room:s.room,activity:s.activity,hunger:s.hunger,energy:s.energy,happiness:s.happy,trust:s.trust,delivery:s.delivery,stash:s.stash,mood:s.mood,time:s.hour+":"+s.minute,allowWalk:$("autoWalk").checked,allowFly:$("autoFly").checked,allowSleep:$("autoSleep").checked})+". Respond ONLY JSON with action and thought. If walking is disabled, do not choose walk or explore. If flying disabled, do not choose fly. If sleeping disabled, do not choose sleep. Be consistent with a shy, sleepy, sometimes curious bat.";try{const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent?key="+encodeURIComponent(key),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:.9,responseMimeType:"application/json"}})});if(!r.ok)throw Error("Gemini returned "+r.status);const j=await r.json();const raw=j.candidates?.[0]?.content?.parts?.[0]?.text||"{}";const d=JSON.parse(raw);applyAction(d.action,d.thought||"He looks at you.");$("connection").textContent="GEMINI CONNECTED"}catch(e){$("connection").textContent="LOCAL BRAIN · AI ERROR";log("Gemini could not respond. Local behaviour takes over.");localDecision()}finally{s.busy=false}}
+function applyAction(a,t){const say=x=>{setActivity(x,t);log(t)};switch(a){case"walk":case"explore":s.energy=clamp(s.energy-4);say("Walking around");break;case"sleep":s.room="Bedroom";s.energy=clamp(s.energy+18);say("Sleeping upside down");break;case"fly":s.room="Outside";s.energy=clamp(s.energy-12);say("Learning to fly");break;case"eat":if(s.delivery)eatOrStore();else say("Looking for a snack");break;case"store":if(s.delivery)eatOrStore();else say("Checking his stash");break;case"play":s.happy=clamp(s.happy+5);say("Playing");break;case"ask_food":case"ask_drink":case"ask_snack":case"ask_mouse":say("Asking you for "+a.replace("ask_",""));break;default:say("Sitting quietly")}}
+function localDecision(){if(s.delivery){eatOrStore();return}if(s.energy<20&&$("autoSleep").checked){s.room="Bedroom";s.energy=clamp(s.energy+15);setActivity("Sleeping upside down","He has gone to sleep in his dark bedroom.");return}if(s.room==="Bedroom"&&s.energy>70){s.room="Living room";setActivity("Walking out of the bedroom","He has woken up and is stretching.");return}const r=Math.random();if(r<.25){setActivity("Sitting quietly","He is quietly observing the room.");}else if(r<.53&&$("autoWalk").checked){setActivity("Walking around","He wanders around his house, looking at things.");s.energy=clamp(s.energy-3)}else if(r<.67&&$("autoFly").checked){s.room="Outside";setActivity("Learning to fly","He practises a short, wobbly flight outside.");s.energy=clamp(s.energy-8)}else{setActivity("Looking around","His ears twitch as he listens to the house.")}}
+document.querySelectorAll("[data-food]").forEach(b=>b.onclick=()=>{if(s.delivery){log("There is already a parcel outside.");return}s.delivery=b.dataset.food;setActivity("Noticed a delivery","He heard something being left outside his front door.");log("A "+s.delivery+" delivery was left outside.");});
+$("wave").onclick=()=>{s.trust=clamp(s.trust+2);s.happy=clamp(s.happy+3);setActivity("Looking at you","He notices your wave. His ears perk up.");log("You wave. He seems a little more comfortable.")};
+$("talk").onclick=()=>{s.trust=clamp(s.trust+1);setActivity("Listening to you","He tilts his head, listening to your voice.");log("You spend a moment talking to him.")};
+$("outside").onclick=()=>{s.room="Outside";setActivity("Flying outside","He goes outside for a little flight.");s.energy=clamp(s.energy-8)};
+$("bed").onclick=()=>{s.room="Bedroom";setActivity("Sleeping upside down","He settles upside down in his dark bedroom.");};
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));$("settings").classList.toggle("hidden",b.dataset.tab!=="settings");$("inventory").classList.toggle("hidden",b.dataset.tab!=="inventory")});
+$("save").onclick=()=>{localStorage.setItem("nightwing-settings",JSON.stringify({key:$("apiKey").value,model:$("model").value,ai:$("aiEnabled").checked,walk:$("autoWalk").checked,fly:$("autoFly").checked,sleep:$("autoSleep").checked}));log("Settings saved on this device.");$("connection").textContent=$("aiEnabled").checked?"GEMINI READY":"LOCAL BRAIN"};
+try{const c=JSON.parse(localStorage.getItem("nightwing-settings")||"{}");$("apiKey").value=c.key||"";$("model").value=c.model||"gemini-3.6";$("aiEnabled").checked=!!c.ai;$("autoWalk").checked=c.walk!==false;$("autoFly").checked=c.fly!==false;$("autoSleep").checked=c.sleep!==false}catch{}
+setInterval(()=>{s.minute+=5;if(s.minute>=60){s.minute=0;s.hour++;if(s.hour>=24){s.hour=0;s.day++}}s.hunger=clamp(s.hunger+1);if(s.activity.includes("sleep"))s.energy=clamp(s.energy+3);else s.energy=clamp(s.energy-.5);render()},5000);
+setInterval(()=>{if(!s.busy)aiDecision()},25000);render();setTimeout(()=>log("He gives a tiny yawn."),1800);
+</script>
+</body></html>
